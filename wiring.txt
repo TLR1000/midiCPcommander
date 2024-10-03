@@ -1,0 +1,30 @@
+Wiring Description
+1. Wemos D1 Mini Pin Assignments
+GPIO 14 (D5) → Program select button
+GPIO 13 (D7) → Channel select button
+GPIO 12 (D6) → Send MIDI button
+GPIO 16 (D0) → Reset button (with an external 10kΩ pull-up resistor)
+GPIO 5 (D1) → SCL of OLED Display
+GPIO 4 (D2) → SDA of OLED Display
+GPIO 1 (TX) → MIDI out (through a 220Ω resistor)
+
+2. OLED Display (SSD1306) Wiring
+VCC → 3.3V on Wemos D1 Mini
+GND → GND on Wemos D1 Mini
+SCL → GPIO 5 (D1) (I2C Clock)
+SDA → GPIO 4 (D2) (I2C Data)
+
+3. MIDI Out Connector Wiring (5-Pin DIN)
+MIDI Pin 2 (GND) → GND on Wemos D1 Mini
+MIDI Pin 4 → 3.3V (or 5V) via 220Ω resistor
+MIDI Pin 5 → GPIO 1 (TX) via a 220Ω resistor
+
+4. Push Buttons Wiring
+Each button (Program, Channel, Send, Reset) is connected as follows:
+One side of each button → Ground (GND)
+Other side of each button:
+Program Button → GPIO 14 (D5)
+Channel Button → GPIO 13 (D7)
+Send Button → GPIO 12 (D6)
+Reset Button → GPIO 16 (D0) (with an external 10kΩ pull-up resistor to 3.3V)
+The external pull-up resistor for the reset button is connected between GPIO 16 (D0) and 3.3V.
