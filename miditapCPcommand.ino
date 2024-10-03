@@ -70,11 +70,21 @@ void loop() {
   }
   lastChannelButtonState = currentChannelButtonState;
 
-  // Handle send message button
+  // Handle send message button and display feedback message
   int currentSendButtonState = digitalRead(buttonSendPin);
   if (currentSendButtonState == LOW && lastSendButtonState == HIGH) {
     MIDI.sendProgramChange(programNumber, midiChannel);  // Send MIDI Program Change message
-    delay(200);  // Debounce
+
+    // Show "MIDI Sent!" message on OLED
+    display.clearDisplay();
+    display.setTextSize(2);
+    display.setCursor(0, 20);
+    display.println("MIDI Sent!");
+    display.display();
+
+    delay(1000);  // Wait for 1 second before returning to the program/channel display
+
+    updateDisplay();  // Return to displaying the program number and channel
   }
   lastSendButtonState = currentSendButtonState;
 }
