@@ -2,6 +2,7 @@
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
 #include <MIDI.h>
+#include <Fonts/FreeSans9pt7b.h>  // Include a custom font
 
 // OLED Display Settings
 #define SCREEN_WIDTH 128
@@ -45,7 +46,8 @@ void setup() {
 
   // Display welcome message
   display.clearDisplay();
-  display.setTextSize(2);  // Large text size for visibility
+  //display.setTextSize(2);  // Large text size for visibility
+  display.setFont(&FreeSans9pt7b);  // Set the custom font
   display.setTextColor(WHITE);
   display.setCursor(0, 20);
   display.println("MIDI Setup");
@@ -60,8 +62,8 @@ void loop() {
   int currentProgramButtonState = digitalRead(buttonProgramPin);
   if (currentProgramButtonState == LOW && lastProgramButtonState == HIGH) {
     programNumber = (programNumber + 1) % 128;  // Increment program number, wrap around at 127
-    updateDisplay();  // Update OLED with new program number
-    delay(200);  // Debounce
+    updateDisplay();                            // Update OLED with new program number
+    delay(200);                                 // Debounce
   }
   lastProgramButtonState = currentProgramButtonState;
 
@@ -69,8 +71,8 @@ void loop() {
   int currentChannelButtonState = digitalRead(buttonChannelPin);
   if (currentChannelButtonState == LOW && lastChannelButtonState == HIGH) {
     midiChannel = (midiChannel % 16) + 1;  // Increment channel, wrap around at 16
-    updateDisplay();  // Update OLED with new channel
-    delay(200);  // Debounce
+    updateDisplay();                       // Update OLED with new channel
+    delay(200);                            // Debounce
   }
   lastChannelButtonState = currentChannelButtonState;
 
@@ -81,9 +83,10 @@ void loop() {
 
     // Show "MIDI Sent!" message on OLED
     display.clearDisplay();
-    display.setTextSize(2);
+    //display.setTextSize(2);  // Large text size for visibility
+    display.setFont(&FreeSans9pt7b);  // Set the custom font
     display.setCursor(0, 20);
-    display.println("MIDI Sent!");
+    display.println("MIDI Sent !");
     display.display();
 
     delay(1000);  // Wait for 1 second before returning to the program/channel display
@@ -95,15 +98,17 @@ void loop() {
   // Handle reset message button and display feedback message
   int currentResetButtonState = digitalRead(buttonResetPin);
   if (currentResetButtonState == LOW && lastResetButtonState == HIGH) {
-    // perform reset logic. 
+    // perform reset logic.
     programNumber = 0;
     midiChannel = 1;
 
     // Show message on OLED
     display.clearDisplay();
-    display.setTextSize(2);
+    //display.setTextSize(2);  // Large text size for visibility
+    display.setFont(&FreeSans9pt7b);  // Set the custom font
+
     display.setCursor(0, 20);
-    display.println("Reset!");
+    display.println("Reset values");
     display.display();
 
     delay(1000);  // Wait for 1 second before returning to the program/channel display
@@ -111,18 +116,18 @@ void loop() {
     updateDisplay();  // Return to displaying the program number and channel
   }
   lastResetButtonState = currentResetButtonState;
-
 }
 
 // Function to update OLED with current program and channel
 void updateDisplay() {
   display.clearDisplay();
-  display.setTextSize(2);  // Set text size for clear display
-  display.setCursor(0, 0);
-  display.print("Program:");
-  display.println(programNumber);
-  display.setCursor(0, 32);
-  display.print("Channel:");
+  //display.setTextSize(2);  // Large text size for visibility
+  display.setFont(&FreeSans9pt7b);  // Set the custom font
+  display.setCursor(0, 20);
+  display.print("Channel ");
   display.println(midiChannel);
+  display.setCursor(0, 50);
+  display.print("Program ");
+  display.println(programNumber);
   display.display();
 }
