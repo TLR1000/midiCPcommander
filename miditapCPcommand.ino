@@ -15,6 +15,7 @@ MIDI_CREATE_DEFAULT_INSTANCE();
 const int buttonProgramPin = 14;  // Program select button (GPIO 14 - D5)
 const int buttonChannelPin = 13;  // Channel select button (GPIO 13 - D7)
 const int buttonSendPin = 12;     // Send message button (GPIO 12 - D6)
+const int buttonResetPin = 16;    // Send message button (GPIO 12 - D6)
 
 // MIDI Variables
 int midiChannel = 1;    // Default channel is 1 (range 1-16)
@@ -24,6 +25,7 @@ int programNumber = 0;  // Default program number is 0 (range 0-127)
 int lastProgramButtonState = HIGH;
 int lastChannelButtonState = HIGH;
 int lastSendButtonState = HIGH;
+int lastResetButtonState = HIGH;
 
 void setup() {
   // Initialize MIDI
@@ -33,10 +35,12 @@ void setup() {
   pinMode(buttonProgramPin, INPUT_PULLUP);
   pinMode(buttonChannelPin, INPUT_PULLUP);
   pinMode(buttonSendPin, INPUT_PULLUP);
+  pinMode(buttonResetPin, INPUT);
 
   // Initialize OLED for 128x64 screen
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    for (;;);  // Loop forever if OLED fails to initialize
+    for (;;)
+      ;  // Loop forever if OLED fails to initialize
   }
 
   // Display welcome message
@@ -87,6 +91,27 @@ void loop() {
     updateDisplay();  // Return to displaying the program number and channel
   }
   lastSendButtonState = currentSendButtonState;
+
+  // Handle reset message button and display feedback message
+  int currentResetButtonState = digitalRead(buttonResetPin);
+  if (currentResetButtonState == LOW && lastResetButtonState == HIGH) {
+    // perform reset logic. 
+    programNumber = 0;
+    midiChannel = 1;
+
+    // Show message on OLED
+    display.clearDisplay();
+    display.setTextSize(2);
+    display.setCursor(0, 20);
+    display.println("Reset!");
+    display.display();
+
+    delay(1000);  // Wait for 1 second before returning to the program/channel display
+
+    updateDisplay();  // Return to displaying the program number and channel
+  }
+  lastResetButtonState = currentResetButtonState;
+
 }
 
 // Function to update OLED with current program and channel
@@ -94,10 +119,10 @@ void updateDisplay() {
   display.clearDisplay();
   display.setTextSize(2);  // Set text size for clear display
   display.setCursor(0, 0);
-  display.print("Program: ");
+  display.print("Program:");
   display.println(programNumber);
   display.setCursor(0, 32);
-  display.print("Channel: ");
+  display.print("Channel:");
   display.println(midiChannel);
   display.display();
 }
