@@ -1,14 +1,20 @@
-The sketch, as it is currently written, supports the following modes with regards to Bank Select:
-
-1. MSB (Most Significant Byte) Bank Select Support:
-The sketch sends Control Change (CC#0) messages, which are used to select the MSB for bank switching.
-MSB-only devices are supported by the sketch. When the program number reaches 127 and rolls over to 0, a new Bank Select MSB message is sent, and the bank number is incremented.
-2. LSB (Least Significant Byte) Bank Select Support (Optional):
-The current sketch sends both MSB (CC#0) and LSB (CC#32) messages, allowing support for devices that require both for bank switching.
-This dual-message support means the sketch can handle devices that use both MSB and LSB for selecting banks, giving access to a wide range of sounds beyond 128 programs.
-3. Program Change:
-The sketch works alongside Program Change messages to allow selecting programs within the current bank.
-After switching banks using Bank Select, the program number is sent to select a specific sound/patch within that bank.
-Summary of Modes:
-MSB-only mode: If your device supports only MSB Bank Select (using CC#0), the sketch will work in this mode.
-MSB + LSB mode: If your device requires both MSB and LSB (CC#32), the sketch currently sends both messages, making it compatible with this mode as well.
+Basic Operation
+1. Power Up and Welcome Screen
+When powered, the OLED displays a "MIDI Setup" welcome message. Afterward, the display will show the current Channel, Program, and Bank.
+2. Program Selection:
+Press the Program Select Button to increment the program number from 0 to 127. When it reaches 127, it wraps around to 0 and the bank increments.
+The OLED will display the current Program Number and Bank Number.
+3. Channel Selection:
+Press the Channel Select Button to increment the MIDI Channel from 1 to 16.
+The OLED will show the selected channel.
+4. Send Program Change:
+Once the desired Program and Channel are set, press the Send Button. This sends a MIDI Program Change message to the connected MIDI device.
+The OLED will display "MIDI Sent!" for 1 second and then revert back to the current settings display.
+5. Reset:
+Press the Reset Button to reset the Program to 0, the MIDI Channel to 1, and the Bank to 0.
+The OLED will display "Reset Values" for 1 second before returning to the settings display.
+Bank Select Operation
+Bank Switching: When the Program Number rolls over from 127 to 0, the bank number is incremented, and a Bank Select message (MSB + LSB) is sent.
+MSB (CC#0): Sent to select the general bank.
+LSB (CC#32): Sent for fine bank selection (if supported by your MIDI device).
+Note: If your device only supports MSB bank switching, the sketch is already configured to work in that mode. It sends both MSB and LSB by default, but you can modify the code to send only MSB if necessary.
