@@ -1,6 +1,6 @@
 Basic Operation
 1. Power Up and Welcome Screen   
-Wanneer ingeschakeld, toont de tft display een welkomstbericht "MIDI Setup". Daarna zal het display het huidige Kanaal, Programma en Bank weergeven.
+Wanneer een voedingspanning wordt aangesloten, toont de tft display een welkomstbericht "MIDI Setup". Daarna zal het display het huidige Kanaal, Programma en Bank weergeven.
 2. Program Selection   
 Druk op de Program knop om het programmummer te verhogen van 0 tot 127. Wanneer het 127 bereikt, springt het terug naar 0 en wordt de bank verhoogd. De tft display zal het huidige Programmummer en Banknummer tonen.
 3. Channel Selection  
